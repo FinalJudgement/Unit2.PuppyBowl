@@ -7,6 +7,7 @@ const state = {
   allPlayers: [],
 };
 
+// retrieve data from API
 const getPlayersFromAPI = async () => {
   try {
     const response = await fetch(`${baseURL}players`);
@@ -21,10 +22,11 @@ const getPlayersFromAPI = async () => {
   }
 };
 
+// set our state object to equal
 const updateState = (data) => {
   state.allPlayers = data.players;
 };
-
+// strictly the HTML for the form
 const generateFormHTML = () => {
   main.innerHTML = `
   <article>
@@ -52,14 +54,7 @@ const generateFormHTML = () => {
   `;
 };
 
-const render = () => {
-  generateFormHTML();
-  getFormData();
-  state.allPlayers.map((v) => {
-    generateCard(v);
-  });
-};
-
+// generate the full card by invoing functions that populate the card
 const generateCard = (data) => {
   main.style.flexWrap = "wrap";
 
@@ -70,18 +65,19 @@ const generateCard = (data) => {
   main.appendChild(article);
 };
 
+// creates h2 and appends it to card
 const generateHeading = (article, data) => {
   const h2 = document.createElement("h2");
   h2.innerHTML = data.name;
   article.appendChild(h2);
 };
-
+// creates Image and appends it to card
 const generateImg = (article, data) => {
   const img = document.createElement("img");
   img.src = data.imageUrl;
   article.appendChild(img);
 };
-
+// turns the card into clickable link
 const turnIntoLink = (article, data) => {
   article.addEventListener("click", () => {
     main.style.flexWrap = "nowrap";
@@ -95,7 +91,7 @@ const turnIntoLink = (article, data) => {
       <p>Breed: ${data.breed}</p>
       <p>Status: ${data.status}</p>
       <button onClick="render()">Back to roster</button>
-      <button id="deletePlayer">Delete Player</button>
+      <button id="deletePlayer" style="background-color: red;">Delete Player</button>
       </div>
     `;
     main.innerHTML = html;
@@ -106,6 +102,7 @@ const turnIntoLink = (article, data) => {
   });
 };
 
+// give form a listener to update database when submitted
 const getFormData = () => {
   const form = document.querySelector("form");
   form.addEventListener("submit", (e) => {
@@ -123,10 +120,13 @@ const getFormData = () => {
     };
     state.allPlayers.unshift(newPlayer);
     pushPlayerDataToAPI(newPlayer);
+
+    form.reset();
     render();
   });
 };
 
+// push the new created player from the form into the API
 const pushPlayerDataToAPI = async (player) => {
   try {
     const response = await fetch(`${baseURL}players`, {
@@ -141,15 +141,15 @@ const pushPlayerDataToAPI = async (player) => {
   }
 };
 
+// Delete the player from our local state object
 const deletePlayer = (data) => {
-  const playerObj = state.allPlayers.find((v) => v.id === data.id);
   const playerObjIndex = state.allPlayers.findIndex((v) => v.id === data.id);
   state.allPlayers.splice(playerObjIndex, 1);
-  console.log(playerObj.id);
-  removeFromAPI(playerObj);
+  removeFromAPI(data);
   render();
 };
 
+// delete the player from the API we are using
 const removeFromAPI = async (playerObj) => {
   try {
     const response = await fetch(`${baseURL}players/${playerObj.id}`, {
@@ -161,4 +161,13 @@ const removeFromAPI = async (playerObj) => {
   }
 };
 
-getPlayersFromAPI();
+// refresh the HTML, see if form data has been submitted, and populate cards based off data
+const render = () => {
+  generateFormHTML(); // Refreshes the HTML and creates the first card on the web page
+  getFormData(); // retreivs the form data to create the new player
+  state.allPlayers.map((v) => {
+    generateCard(v); // map over every player in our state object and generate a card for each one in our state
+  });
+};
+
+getPlayersFromAPI(); // start the program by fetching the api
