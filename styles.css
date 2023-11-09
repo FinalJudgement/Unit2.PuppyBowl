@@ -8,20 +8,40 @@ h1 {
 
 main {
   display: flex;
-  flex-wrap: wrap;
   width: 70%;
   margin: 0 auto;
   justify-content: center;
 }
 
 #add-player {
-  width: 250px;
+  background-color: rgb(185, 185, 185);
+  padding: 20px 0;
+  height: 300px;
+  max-width: 200px;
+}
+
+#add-player div {
+  /* background-color: black; */
+  width: 200px;
+  height: 250px;
+}
+
+input {
+  margin: 5px;
+}
+
+button {
+  padding: 5px 25px;
+  background-color: rgb(99, 209, 99);
+  border-radius: 5px;
+  margin: 5px;
 }
 
 article {
   background-color: rgb(200, 36, 36);
   color: white;
   border: 3px solid black;
+  max-width: 200px;
   min-width: 200px;
   height: 300px;
   margin: 20px;
@@ -30,16 +50,21 @@ article {
   text-align: center;
   overflow: hidden;
 }
-
-img {
-  position: relative;
-  bottom: 0;
+#selected {
+  max-height: 300px;
   max-width: 200px;
-  max-height: 250px;
-  min-width: 200px;
+  margin: 20px;
 }
 
-h2 {
+article img {
+  position: relative;
+  bottom: 0;
+  max-height: 250px;
+  min-width: 200px;
+  min-height: 250px;
+}
+
+article h2 {
   position: relative;
   top: 0;
   margin: 10px;
