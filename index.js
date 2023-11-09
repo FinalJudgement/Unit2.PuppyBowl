@@ -142,12 +142,23 @@ const pushPlayerDataToAPI = async (player) => {
 };
 
 const deletePlayer = (data) => {
-  const playerIndex = state.allPlayers.findIndex((v) => v.id === data.id);
-  state.allPlayers.splice(playerIndex, 1);
-  console.log(playerIndex);
+  const playerObj = state.allPlayers.find((v) => v.id === data.id);
+  const playerObjIndex = state.allPlayers.findIndex((v) => v.id === data.id);
+  state.allPlayers.splice(playerObjIndex, 1);
+  console.log(playerObj.id);
+  removeFromAPI(playerObj);
   render();
 };
 
+const removeFromAPI = async (playerObj) => {
+  try {
+    const response = await fetch(`${baseURL}players/${playerObj.id}`, {
+      method: "DELETE",
+    });
+    console.log("Success:", response);
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
 getPlayersFromAPI();
-// allow for their to be a form for adding puppies
-// add option to remove puppies when you click one
